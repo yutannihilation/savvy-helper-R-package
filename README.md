@@ -7,7 +7,7 @@ This is a simple wrapper R package around `savvy-cli` command.
 You can install this package from R-universe.
 
 ``` r
-install.packages("savvy"", repos = c("https://yutannihilation.r-universe.dev", "https://cloud.r-project.org"))
+install.packages("savvy", repos = c("https://yutannihilation.r-universe.dev", "https://cloud.r-project.org"))
 ```
 
 ## Usage
