@@ -1,0 +1,16 @@
+Package: savvy
+Title: A Simple Wrapper of 'savvy-cli' Command
+Version: 0.0.0.9000
+Authors@R: 
+    c(person(given = "Hiroaki",
+             family = "Yutani",
+             role = c("aut", "cre"),
+             email = "yutani.ini@gmail.com",
+             comment = c(ORCID = "0000-0002-3385-7233"))
+    )
+Description: Generates the C and R wrappers for the Rust-powered R package using the savvy framework.
+License: MIT + file LICENSE
+URL: https://github.com/yutannihilation/savvy
+Encoding: UTF-8
+Roxygen: list(markdown = TRUE)
+RoxygenNote: 7.2.3
