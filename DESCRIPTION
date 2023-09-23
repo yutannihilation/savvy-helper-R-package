@@ -1,6 +1,6 @@
 Package: savvy
 Title: A Simple Wrapper of 'savvy-cli' Command
-Version: 0.0.0.9000
+Version: 0.0.1
 Authors@R: 
     c(person(given = "Hiroaki",
              family = "Yutani",
@@ -14,3 +14,5 @@ URL: https://github.com/yutannihilation/savvy
 Encoding: UTF-8
 Roxygen: list(markdown = TRUE)
 RoxygenNote: 7.2.3
+Imports: 
+    jsonlite

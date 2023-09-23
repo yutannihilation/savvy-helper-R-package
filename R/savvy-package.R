@@ -6,3 +6,7 @@
 ## usethis namespace: start
 ## usethis namespace: end
 NULL
+
+.onLoad <- function(libname, pkgname) {
+  dir.create(savvy_cache_dir(), recursive = TRUE, showWarnings = FALSE)
+}
