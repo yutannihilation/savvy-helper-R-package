@@ -53,7 +53,7 @@ download_savvy_cli <- function() {
     utils::unzip(archive_file, exdir = extract_tmp_dir)
     file.copy(file.path(extract_tmp_dir, "savvy-cli.exe"), savvy_cli_path())
   } else {
-    utils::untar(archive_file, exdir = extract_tmp_dir)
+    utils::untar(archive_file, exdir = extract_tmp_dir, extras = "--strip-components=1")
     file.copy(file.path(extract_tmp_dir, "savvy-cli"), savvy_cli_path())
   }
 }
