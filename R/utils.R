@@ -51,11 +51,13 @@ download_savvy_cli <- function() {
   # extract and copy
   if (Sys.info()[["sysname"]] == "Windows") {
     utils::unzip(archive_file, exdir = extract_tmp_dir)
-    file.copy(file.path(extract_tmp_dir, "savvy-cli.exe"), savvy_cli_path())
+    file.copy(file.path(extract_tmp_dir, "savvy-cli.exe"), savvy_cli_path(), overwrite = TRUE)
   } else {
     utils::untar(archive_file, exdir = extract_tmp_dir, extras = "--strip-components=1")
-    file.copy(file.path(extract_tmp_dir, "savvy-cli"), savvy_cli_path())
+    file.copy(file.path(extract_tmp_dir, "savvy-cli"), savvy_cli_path(), overwrite = TRUE)
   }
+
+  invisible(NULL)
 }
 
 #' Execute `savvy-cli update``
