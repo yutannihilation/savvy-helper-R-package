@@ -85,3 +85,15 @@ savvy_init <- function(path = ".") {
 
   system2(savvy_cli_path(), args = c("init", path))
 }
+
+#' Execute `savvy-cli --version``
+#'
+#' @export
+savvy_version <- function() {
+  if (!file.exists(savvy_cli_path())) {
+    cat("Downloading savvy-cli binary")
+    download_savvy_cli()
+  }
+
+  system2(savvy_cli_path(), args = c("--version"))
+}

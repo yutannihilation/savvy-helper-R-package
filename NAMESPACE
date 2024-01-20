@@ -3,3 +3,4 @@
 export(download_savvy_cli)
 export(savvy_init)
 export(savvy_update)
+export(savvy_version)
