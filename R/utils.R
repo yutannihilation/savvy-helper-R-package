@@ -26,7 +26,7 @@ get_download_url <- function() {
 
   binary <- switch (os,
     Windows = "savvy-cli-x86_64-pc-windows-msvc.zip",
-    Linux   = "savvy-cli-x86_64-unknown-linux-gnu.tar.xz",
+    Linux   = if(arch == "x86-64") "savvy-cli-x86_64-unknown-linux-gnu.tar.xz" else "savvy-cli-aarch64-unknown-linux-gnu.tar.xz",
     Darwin  = if(arch == "x86-64") "savvy-cli-x86_64-apple-darwin.tar.xz" else "savvy-cli-aarch64-apple-darwin.tar.xz"
   )
 
