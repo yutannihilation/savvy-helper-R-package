@@ -84,6 +84,12 @@ savvy_init <- function(path = ".") {
   }
 
   system2(savvy_cli_path(), args = c("init", path))
+
+  # Rust provides a way to set a file executable only on Unix-alike,
+  # so, on Windows, this has to be cared here.
+  if (Sys.info()[["sysname"]] == "Windows") {
+    Sys.chmod(file.path(path, "configure"), mode = "0755")
+  }
 }
 
 #' Execute `savvy-cli --version``
