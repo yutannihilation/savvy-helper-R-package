@@ -15,7 +15,7 @@ savvy_cli_path <- function() {
 }
 
 get_latest_release <- function() {
-   jsonlite::read_json("https://api.github.com/repos/yutannihilation/savvy/releases/latest")[["tag_name"]]
+  jsonlite::read_json("https://api.github.com/repos/yutannihilation/savvy/releases/latest")[["tag_name"]]
 }
 
 get_download_url <- function() {
@@ -24,10 +24,10 @@ get_download_url <- function() {
   os <- Sys.info()[["sysname"]]
   arch <- Sys.info()[["machine"]]
 
-  binary <- switch (os,
+  binary <- switch(os,
     Windows = "savvy-cli-x86_64-pc-windows-msvc.zip",
-    Linux   = if(arch == "x86-64") "savvy-cli-x86_64-unknown-linux-gnu.tar.xz" else "savvy-cli-aarch64-unknown-linux-gnu.tar.xz",
-    Darwin  = if(arch == "x86-64") "savvy-cli-x86_64-apple-darwin.tar.xz" else "savvy-cli-aarch64-apple-darwin.tar.xz"
+    Linux   = if (arch == "x86_64") "savvy-cli-x86_64-unknown-linux-gnu.tar.xz" else "savvy-cli-aarch64-unknown-linux-gnu.tar.xz",
+    Darwin  = if (arch == "x86_64") "savvy-cli-x86_64-apple-darwin.tar.xz" else "savvy-cli-aarch64-apple-darwin.tar.xz"
   )
 
   paste(SAVVY_CLI_URL_BASE, latest_release, binary, sep = "/")
