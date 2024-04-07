@@ -4,7 +4,7 @@
 \alias{savvy_source}
 \title{Compile Rust Code And Load}
 \usage{
-savvy_source(code, use_cache_dir = TRUE)
+savvy_source(code, use_cache_dir = FALSE)
 }
 \arguments{
 \item{code}{Rust code to compile.}

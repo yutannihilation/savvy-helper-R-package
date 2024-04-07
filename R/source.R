@@ -4,7 +4,7 @@
 #' @param use_cache_dir If `TRUE`, reuse and override the cache dir to avoid re-compilation.
 #'
 #' @export
-savvy_source <- function(code, use_cache_dir = TRUE) {
+savvy_source <- function(code, use_cache_dir = FALSE) {
   if (use_cache_dir) {
     dir <- file.path(savvy_cache_dir(), "R-package")
     pkg_name <- "savvyTemporaryPackage"
@@ -25,7 +25,7 @@ savvy_source <- function(code, use_cache_dir = TRUE) {
   writeLines(sprintf(DESCRIPTION, pkg_name), file.path(dir, "DESCRIPTION"))
 
   if (!dir.exists(file.path(dir, "src"))) {
-    savvy_init(dir, verbose = FALSE)
+    savvy_init(dir, verbose = TRUE)
   }
 
   writeLines(code, file.path(dir, "src", "rust", "src", "lib.rs"))
@@ -51,7 +51,7 @@ generate_pkg_name <- function() {
 
   i <- 1L
   new_name <- sprintf("savvyTemporaryPackage%i", i)
-  while(new_name %in% loaded_dlls) {
+  while (new_name %in% loaded_dlls) {
     new_name <- sprintf("savvyTemporaryPackage%i", i)
     i <- i + 1
   }
@@ -64,7 +64,8 @@ tweak_wrappers <- function(path, pkg_name) {
 
   call_wrapper <- sprintf(".Call_%s", pkg_name)
   r_code <- gsub(".Call", call_wrapper, r_code)
-  r_code <- c(r_code,
+  r_code <- c(
+    r_code,
     "",
     sprintf("%s <- function(symbol, ...) {", call_wrapper),
     "  symbol_string <- deparse(substitute(symbol))",
