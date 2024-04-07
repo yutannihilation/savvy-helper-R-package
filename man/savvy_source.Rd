@@ -9,7 +9,8 @@ savvy_source(code, use_cache_dir = FALSE)
 \arguments{
 \item{code}{Rust code to compile.}
 
-\item{use_cache_dir}{If \code{TRUE}, reuse and override the cache dir to avoid re-compilation.}
+\item{use_cache_dir}{If \code{TRUE}, reuse and override the cache dir to avoid
+re-compilation. This is an expert-only option.}
 }
 \description{
 Compile Rust Code And Load

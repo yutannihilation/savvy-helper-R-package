@@ -1,7 +1,8 @@
 #' Compile Rust Code And Load
 #'
 #' @param code Rust code to compile.
-#' @param use_cache_dir If `TRUE`, reuse and override the cache dir to avoid re-compilation.
+#' @param use_cache_dir If `TRUE`, reuse and override the cache dir to avoid
+#' re-compilation. This is an expert-only option.
 #'
 #' @export
 savvy_source <- function(code, use_cache_dir = FALSE) {
