@@ -28,7 +28,7 @@ savvy_source <- function(code, use_cache_dir = FALSE) {
   writeLines(sprintf(DESCRIPTION, pkg_name), file.path(dir, "DESCRIPTION"))
 
   if (!dir.exists(file.path(dir, "src"))) {
-    savvy_init(dir, verbose = TRUE)
+    savvy_init(dir, verbose = FALSE)
   }
 
   writeLines(code, file.path(dir, "src", "rust", "src", "lib.rs"))
