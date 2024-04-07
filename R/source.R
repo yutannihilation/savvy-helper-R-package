@@ -22,13 +22,13 @@ savvy_source <- function(code, use_cache_dir = TRUE) {
   dir.create(dir, showWarnings = FALSE, recursive = TRUE)
   dir.create(file.path(dir, "R"), showWarnings = FALSE)
   file.create(file.path(dir, "NAMESPACE"), showWarnings = FALSE)
-  brio::write_lines(sprintf(DESCRIPTION, pkg_name), file.path(dir, "DESCRIPTION"))
+  writeLines(sprintf(DESCRIPTION, pkg_name), file.path(dir, "DESCRIPTION"))
 
   if (!dir.exists(file.path(dir, "src"))) {
     savvy_init(dir, verbose = FALSE)
   }
 
-  brio::write_lines(code, file.path(dir, "src", "rust", "src", "lib.rs"))
+  writeLines(code, file.path(dir, "src", "rust", "src", "lib.rs"))
 
   savvy_update(dir)
 
@@ -60,7 +60,7 @@ generate_pkg_name <- function() {
 }
 
 tweak_wrappers <- function(path, pkg_name) {
-  r_code <- brio::read_lines(path)
+  r_code <- readLines(path)
 
   call_wrapper <- sprintf(".Call_%s", pkg_name)
   r_code <- gsub(".Call", call_wrapper, r_code)
@@ -72,5 +72,5 @@ tweak_wrappers <- function(path, pkg_name) {
     "}"
   )
 
-  brio::write_lines(r_code, path)
+  writeLines(r_code, path)
 }
