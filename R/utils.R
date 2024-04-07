@@ -46,7 +46,7 @@ download_savvy_cli <- function() {
   dir.create(download_tmp_dir)
   download_url <- get_download_url()
   archive_file <- file.path(download_tmp_dir, basename(download_url))
-  download.file(download_url, destfile = archive_file, mode = "wb")
+  utils::download.file(download_url, destfile = archive_file, mode = "wb")
 
   # extract and copy
   if (Sys.info()[["sysname"]] == "Windows") {
