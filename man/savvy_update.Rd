@@ -4,10 +4,12 @@
 \alias{savvy_update}
 \title{Execute `savvy-cli update``}
 \usage{
-savvy_update(path = ".")
+savvy_update(path = ".", verbose = TRUE)
 }
 \arguments{
 \item{path}{Path to the root of an R package}
+
+\item{verbose}{If \code{TRUE}, show all the output from savvy-cli.}
 }
 \description{
 Execute `savvy-cli update``

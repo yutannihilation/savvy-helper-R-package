@@ -15,7 +15,7 @@ savvy_cli_path <- function() {
 }
 
 get_latest_release <- function() {
-   jsonlite::read_json("https://api.github.com/repos/yutannihilation/savvy/releases/latest")[["tag_name"]]
+  jsonlite::read_json("https://api.github.com/repos/yutannihilation/savvy/releases/latest")[["tag_name"]]
 }
 
 get_download_url <- function() {
@@ -24,10 +24,10 @@ get_download_url <- function() {
   os <- Sys.info()[["sysname"]]
   arch <- Sys.info()[["machine"]]
 
-  binary <- switch (os,
+  binary <- switch(os,
     Windows = "savvy-cli-x86_64-pc-windows-msvc.zip",
-    Linux   = if(arch == "x86-64") "savvy-cli-x86_64-unknown-linux-gnu.tar.xz" else "savvy-cli-aarch64-unknown-linux-gnu.tar.xz",
-    Darwin  = if(arch == "x86-64") "savvy-cli-x86_64-apple-darwin.tar.xz" else "savvy-cli-aarch64-apple-darwin.tar.xz"
+    Linux   = if (arch == "x86_64") "savvy-cli-x86_64-unknown-linux-gnu.tar.xz" else "savvy-cli-aarch64-unknown-linux-gnu.tar.xz",
+    Darwin  = if (arch == "x86_64") "savvy-cli-x86_64-apple-darwin.tar.xz" else "savvy-cli-aarch64-apple-darwin.tar.xz"
   )
 
   paste(SAVVY_CLI_URL_BASE, latest_release, binary, sep = "/")
@@ -46,7 +46,7 @@ download_savvy_cli <- function() {
   dir.create(download_tmp_dir)
   download_url <- get_download_url()
   archive_file <- file.path(download_tmp_dir, basename(download_url))
-  download.file(download_url, destfile = archive_file, mode = "wb")
+  utils::download.file(download_url, destfile = archive_file, mode = "wb")
 
   # extract and copy
   if (Sys.info()[["sysname"]] == "Windows") {
@@ -63,27 +63,31 @@ download_savvy_cli <- function() {
 #' Execute `savvy-cli update``
 #'
 #' @param path Path to the root of an R package
+#' @param verbose If `TRUE`, show all the output from savvy-cli.
 #' @export
-savvy_update <- function(path = ".") {
+savvy_update <- function(path = ".", verbose = TRUE) {
   if (!file.exists(savvy_cli_path())) {
     cat("Downloading savvy-cli binary")
     download_savvy_cli()
   }
 
-  system2(savvy_cli_path(), args = c("update", path))
+  out <- if (verbose) "" else FALSE
+  system2(savvy_cli_path(), args = c("update", path), stdout = out, stderr = out)
 }
 
 #' Execute `savvy-cli init``
 #'
 #' @param path Path to the root of an R package
+#' @param verbose If `TRUE`, show all the output from savvy-cli.
 #' @export
-savvy_init <- function(path = ".") {
+savvy_init <- function(path = ".", verbose = TRUE) {
   if (!file.exists(savvy_cli_path())) {
     cat("Downloading savvy-cli binary")
     download_savvy_cli()
   }
 
-  system2(savvy_cli_path(), args = c("init", path))
+  out <- if (verbose) "" else FALSE
+  system2(savvy_cli_path(), args = c("init", path), stdout = out, stderr = out)
 }
 
 #' Execute `savvy-cli --version``
