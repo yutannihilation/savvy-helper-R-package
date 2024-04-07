@@ -1,5 +1,10 @@
 # savvy (R package)
 
+<!-- badges: start -->
+[![R-CMD-check](https://github.com/yutannihilation/savvy-helper-R-package/actions/workflows/R-CMD-check.yaml/badge.svg)](https://github.com/yutannihilation/savvy-helper-R-package/actions/workflows/R-CMD-check.yaml)
+<!-- badges: end -->
+
+
 This is a simple wrapper R package around `savvy-cli` command.
 
 ## Installation

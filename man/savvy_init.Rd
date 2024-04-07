@@ -4,10 +4,12 @@
 \alias{savvy_init}
 \title{Execute `savvy-cli init``}
 \usage{
-savvy_init(path = ".")
+savvy_init(path = ".", verbose = TRUE)
 }
 \arguments{
 \item{path}{Path to the root of an R package}
+
+\item{verbose}{If \code{TRUE}, show all the output from savvy-cli.}
 }
 \description{
 Execute `savvy-cli init``

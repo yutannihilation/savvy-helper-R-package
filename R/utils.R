@@ -63,27 +63,31 @@ download_savvy_cli <- function() {
 #' Execute `savvy-cli update``
 #'
 #' @param path Path to the root of an R package
+#' @param verbose If `TRUE`, show all the output from savvy-cli.
 #' @export
-savvy_update <- function(path = ".") {
+savvy_update <- function(path = ".", verbose = TRUE) {
   if (!file.exists(savvy_cli_path())) {
     cat("Downloading savvy-cli binary")
     download_savvy_cli()
   }
 
-  system2(savvy_cli_path(), args = c("update", path))
+  out <- if (verbose) "" else FALSE
+  system2(savvy_cli_path(), args = c("update", path), stdout = out, stderr = out)
 }
 
 #' Execute `savvy-cli init``
 #'
 #' @param path Path to the root of an R package
+#' @param verbose If `TRUE`, show all the output from savvy-cli.
 #' @export
-savvy_init <- function(path = ".") {
+savvy_init <- function(path = ".", verbose = TRUE) {
   if (!file.exists(savvy_cli_path())) {
     cat("Downloading savvy-cli binary")
     download_savvy_cli()
   }
 
-  system2(savvy_cli_path(), args = c("init", path))
+  out <- if (verbose) "" else FALSE
+  system2(savvy_cli_path(), args = c("init", path), stdout = out, stderr = out)
 }
 
 #' Execute `savvy-cli --version``
