@@ -12,9 +12,8 @@ savvy_source <- function(code, use_cache_dir = FALSE, clean = NULL) {
 
   if (isTRUE(use_cache_dir)) {
     # By default, do not remove the directory
-    if (is.null(clean)) {
-      clean <- FALSE
-    }
+    clean <- clean %||% FALSE
+
     dir <- file.path(savvy_cache_dir(), "R-package")
 
     # Using cache means reusing the same DLL with overwriting. So, unload it first.
@@ -25,9 +24,8 @@ savvy_source <- function(code, use_cache_dir = FALSE, clean = NULL) {
     }
   } else {
     # By default, remove the directory
-    if (is.null(clean)) {
-      clean <- TRUE
-    }
+    clean <- clean %||% TRUE
+
     dir <- tempfile()
   }
 

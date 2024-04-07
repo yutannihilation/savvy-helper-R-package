@@ -6,6 +6,14 @@ savvy_cache_dir <- function() {
   normalizePath(tools::R_user_dir("savvy", "cache"), mustWork = FALSE)
 }
 
+`%||%` <- function(x, y) {
+  if (is.null(x)) {
+    y
+  } else {
+    x
+  }
+}
+
 savvy_cli_path <- function() {
   if (Sys.info()[["sysname"]] == "Windows") {
     file.path(savvy_cache_dir(), paste0(SAVVY_CLI_NAME, ".exe"))
