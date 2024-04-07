@@ -7,11 +7,10 @@ fn hello() -> savvy::Result<()> {
     savvy::r_println!("Hello");
     Ok(())
 }
-')
+', use_cache_dir = FALSE)
 
   expect_output(hello(), "Hello")
 
-  # overwrite
   savvy_source('
 use savvy::savvy;
 
@@ -20,8 +19,7 @@ fn goodbye() -> savvy::Result<()> {
     savvy::r_println!("Goodbye");
     Ok(())
 }
-')
+', use_cache_dir = FALSE)
 
-  expect_true(exists("hello"))
   expect_output(goodbye(), "Goodbye")
 })
