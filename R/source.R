@@ -3,12 +3,17 @@
 #' @param code Rust code to compile.
 #' @param use_cache_dir If `TRUE`, reuse and override the cache dir to avoid
 #' re-compilation. This is an expert-only option.
+#' @param clean If `TRUE`, remove the temporary R package used for compilation
+#' at the end of the R session.
 #'
 #' @export
-savvy_source <- function(code, use_cache_dir = FALSE) {
+savvy_source <- function(code, use_cache_dir = FALSE, clean = NULL) {
   pkg_name <- generate_pkg_name()
 
-  if (use_cache_dir) {
+  if (isTRUE(use_cache_dir)) {
+    # By default, do not remove the directory
+    clean <- clean %||% FALSE
+
     dir <- file.path(savvy_cache_dir(), "R-package")
 
     # Using cache means reusing the same DLL with overwriting. So, unload it first.
@@ -18,17 +23,24 @@ savvy_source <- function(code, use_cache_dir = FALSE) {
       }
     }
   } else {
+    # By default, remove the directory
+    clean <- clean %||% TRUE
+
     dir <- tempfile()
   }
 
   # create an empty package
   dir.create(dir, showWarnings = FALSE, recursive = TRUE)
+  if (isTRUE(clean)) {
+    on.exit(unlink(dir, recursive = TRUE), add = TRUE)
+  }
+
   dir.create(file.path(dir, "R"), showWarnings = FALSE)
   file.create(file.path(dir, "NAMESPACE"), showWarnings = FALSE)
   writeLines(sprintf(DESCRIPTION, pkg_name), file.path(dir, "DESCRIPTION"))
 
   if (!dir.exists(file.path(dir, "src"))) {
-    savvy_init(dir, verbose = TRUE)
+    savvy_init(dir, verbose = FALSE)
   }
 
   writeLines(code, file.path(dir, "src", "rust", "src", "lib.rs"))
