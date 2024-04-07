@@ -28,3 +28,21 @@ savvy::savvy_update()
 savvy::download_savvy_cli()
 ```
 
+
+Also, on-the-fly Rust code compliation is experimentally supported.
+
+``` r
+savvy::savvy_source('
+use savvy::savvy;
+
+#[savvy]
+fn hello() -> savvy::Result<()> {
+    savvy::r_println!("Hello!!!!!!");
+    Ok(())
+}
+')
+
+hello()
+#> Hello!!!!!!
+```
+
