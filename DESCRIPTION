@@ -1,6 +1,6 @@
 Package: savvy
 Title: A Simple Wrapper of 'savvy-cli' Command
-Version: 0.0.2
+Version: 0.0.3
 Authors@R: 
     c(person(given = "Hiroaki",
              family = "Yutani",

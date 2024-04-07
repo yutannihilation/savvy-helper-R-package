@@ -28,8 +28,7 @@ savvy::savvy_update()
 savvy::download_savvy_cli()
 ```
 
-
-Also, on-the-fly Rust code compliation is experimentally supported.
+Also, on-the-fly Rust code compilation is experimentally supported.
 
 ``` r
 savvy::savvy_source('

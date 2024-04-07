@@ -1,4 +1,4 @@
-# savvy 0.0.3 (unreleased)
+# savvy 0.0.3
 
 * Fix the download URL of `download_savvy_cli()` on Linux and macOS.
 * New function `savvy_source()` compiles Rust code and makes it temporarily
