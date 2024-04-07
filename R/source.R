@@ -5,17 +5,19 @@
 #'
 #' @export
 savvy_source <- function(code, use_cache_dir = FALSE) {
+  pkg_name <- generate_pkg_name()
+
   if (use_cache_dir) {
     dir <- file.path(savvy_cache_dir(), "R-package")
-    pkg_name <- "savvyTemporaryPackage"
 
     # Using cache means reusing the same DLL with overwriting. So, unload it first.
-    if (pkg_name %in% names(getLoadedDLLs())) {
-      dyn.unload(file.path(dir, "src", sprintf("%s%s", pkg_name, .Platform$dynlib.ext)))
+    for (pkg_name_prev in names(getLoadedDLLs())) {
+      if (startsWith(pkg_name_prev, SAVVY_PACKAGE_PREFIX)) {
+        dyn.unload(file.path(dir, "src", sprintf("%s%s", pkg_name_prev, .Platform$dynlib.ext)))
+      }
     }
   } else {
     dir <- tempfile()
-    pkg_name <- generate_pkg_name()
   }
 
   # create an empty package
@@ -41,6 +43,8 @@ savvy_source <- function(code, use_cache_dir = FALSE) {
   source(wrapper_file)
 }
 
+SAVVY_PACKAGE_PREFIX <- "savvyTemporaryPackage"
+
 DESCRIPTION <- "Package: %s
 Version: 0.0.0
 Encoding: UTF-8"
@@ -50,9 +54,9 @@ generate_pkg_name <- function() {
   loaded_dlls <- names(getLoadedDLLs())
 
   i <- 1L
-  new_name <- sprintf("savvyTemporaryPackage%i", i)
+  new_name <- sprintf("%s%i", SAVVY_PACKAGE_PREFIX, i)
   while (new_name %in% loaded_dlls) {
-    new_name <- sprintf("savvyTemporaryPackage%i", i)
+    new_name <- sprintf("%s%i", SAVVY_PACKAGE_PREFIX, i)
     i <- i + 1
   }
 
