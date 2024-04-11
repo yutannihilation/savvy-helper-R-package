@@ -4,13 +4,15 @@
 \alias{savvy_source}
 \title{Compile Rust Code And Load}
 \usage{
-savvy_source(code, use_cache_dir = FALSE, clean = NULL)
+savvy_source(code, use_cache_dir = FALSE, env = parent.frame(), clean = NULL)
 }
 \arguments{
 \item{code}{Rust code to compile.}
 
 \item{use_cache_dir}{If \code{TRUE}, reuse and override the cache dir to avoid
 re-compilation. This is an expert-only option.}
+
+\item{env}{The R environment where the R wrapping functions should be defined.}
 
 \item{clean}{If \code{TRUE}, remove the temporary R package used for compilation
 at the end of the R session.}

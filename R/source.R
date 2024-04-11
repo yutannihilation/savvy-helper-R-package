@@ -3,11 +3,12 @@
 #' @param code Rust code to compile.
 #' @param use_cache_dir If `TRUE`, reuse and override the cache dir to avoid
 #' re-compilation. This is an expert-only option.
+#' @param env The R environment where the R wrapping functions should be defined.
 #' @param clean If `TRUE`, remove the temporary R package used for compilation
 #' at the end of the R session.
 #'
 #' @export
-savvy_source <- function(code, use_cache_dir = FALSE, clean = NULL) {
+savvy_source <- function(code, use_cache_dir = FALSE, env = parent.frame(), clean = NULL) {
   pkg_name <- generate_pkg_name()
 
   if (isTRUE(use_cache_dir)) {
@@ -53,7 +54,7 @@ savvy_source <- function(code, use_cache_dir = FALSE, clean = NULL) {
 
   wrapper_file <- file.path(dir, "R", "wrappers.R")
   tweak_wrappers(wrapper_file, pkg_name)
-  source(wrapper_file)
+  source(wrapper_file, local = env)
 }
 
 SAVVY_PACKAGE_PREFIX <- "savvyTemporaryPackage"
