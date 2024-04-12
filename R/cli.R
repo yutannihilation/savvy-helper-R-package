@@ -3,10 +3,16 @@ SAVVY_CLI_URL_BASE <- "https://github.com/yutannihilation/savvy/releases/downloa
 SAVVY_CLI_NAME <- "savvy-cli"
 
 savvy_cli_path <- function() {
-  if (Sys.info()[["sysname"]] == "Windows") {
-    file.path(savvy_cache_dir(), paste0(SAVVY_CLI_NAME, ".exe"))
+  bin <- if (Sys.info()[["sysname"]] == "Windows") {
+    paste0(SAVVY_CLI_NAME, ".exe")
   } else {
-    file.path(savvy_cache_dir(), SAVVY_CLI_NAME)
+    SAVVY_CLI_NAME
+  }
+
+  if (isTRUE(getOption("savvy.use_installed_cli"))) {
+    bin
+  } else {
+    file.path(savvy_cache_dir(), bin)
   }
 }
 
@@ -62,7 +68,7 @@ download_savvy_cli <- function() {
 #' @param verbose If `TRUE`, show all the output from savvy-cli.
 #' @export
 savvy_update <- function(path = ".", verbose = TRUE) {
-  if (!file.exists(savvy_cli_path())) {
+  if (!isTRUE(getOption("savvy.use_installed_cli")) && !file.exists(savvy_cli_path())) {
     cat("Downloading savvy-cli binary")
     download_savvy_cli()
   }
@@ -77,7 +83,7 @@ savvy_update <- function(path = ".", verbose = TRUE) {
 #' @param verbose If `TRUE`, show all the output from savvy-cli.
 #' @export
 savvy_init <- function(path = ".", verbose = TRUE) {
-  if (!file.exists(savvy_cli_path())) {
+  if (!isTRUE(getOption("savvy.use_installed_cli")) && !file.exists(savvy_cli_path())) {
     cat("Downloading savvy-cli binary")
     download_savvy_cli()
   }
@@ -90,7 +96,7 @@ savvy_init <- function(path = ".", verbose = TRUE) {
 #'
 #' @export
 savvy_version <- function() {
-  if (!file.exists(savvy_cli_path())) {
+  if (!isTRUE(getOption("savvy.use_installed_cli")) && !file.exists(savvy_cli_path())) {
     cat("Downloading savvy-cli binary")
     download_savvy_cli()
   }
