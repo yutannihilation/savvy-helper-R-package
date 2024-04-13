@@ -55,7 +55,16 @@ savvy_source <- function(code, use_cache_dir = FALSE, env = parent.frame(), depe
 
   pkgbuild::compile_dll(dir)
 
-  dyn.load(file.path(dir, "src", sprintf("%s%s", pkg_name, .Platform$dynlib.ext)))
+  dll_file <- file.path(dir, "src", sprintf("%s%s", pkg_name, .Platform$dynlib.ext))
+
+  # the directory cannot be removed if the loaded DLL file is inside, so move it
+  # to some other place beforehand.
+  if (isTRUE(clean)) {
+    dll_file_orig <- dll_file
+    dll_file <- tempfile(fileext = .Platform$dynlib.ext)
+    file.rename(dll_file_orig, dll_file)
+  }
+  dyn.load(dll_file)
 
   wrapper_file <- file.path(dir, "R", "wrappers.R")
   tweak_wrappers(wrapper_file, pkg_name)
