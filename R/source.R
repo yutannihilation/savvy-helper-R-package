@@ -68,16 +68,22 @@ DESCRIPTION <- "Package: %s
 Version: 0.0.0
 Encoding: UTF-8"
 
+tmp_pkg_count <- new.env(parent = emptyenv())
+tmp_pkg_count$i <- 0L
+
 # Based on cpp11:::generate_cpp_name
 generate_pkg_name <- function() {
   loaded_dlls <- names(getLoadedDLLs())
 
-  i <- 1L
+  i <- tmp_pkg_count$i
+  i <- i + 1L
   new_name <- sprintf("%s%i", SAVVY_PACKAGE_PREFIX, i)
   while (new_name %in% loaded_dlls) {
     new_name <- sprintf("%s%i", SAVVY_PACKAGE_PREFIX, i)
     i <- i + 1
   }
+
+  tmp_pkg_count$i <- i
 
   new_name
 }
