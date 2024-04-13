@@ -5,10 +5,13 @@
 #' re-compilation. This is an expert-only option.
 #' @param env The R environment where the R wrapping functions should be defined.
 #' @param clean If `TRUE`, remove the temporary R package used for compilation
+#' @param dependencies List of dependencies. (e.g. `list(once_cell = list(version = "1"))`)
 #' at the end of the R session.
 #'
 #' @export
-savvy_source <- function(code, use_cache_dir = FALSE, env = parent.frame(), clean = NULL) {
+savvy_source <- function(code, use_cache_dir = FALSE, env = parent.frame(), dependencies = list(), clean = NULL) {
+  check_savvy_cli()
+
   pkg_name <- generate_pkg_name()
 
   if (isTRUE(use_cache_dir)) {
@@ -46,6 +49,8 @@ savvy_source <- function(code, use_cache_dir = FALSE, env = parent.frame(), clea
 
   writeLines(code, file.path(dir, "src", "rust", "src", "lib.rs"))
 
+  tweak_cargo_toml(file.path(dir, "src", "rust", "Cargo.toml"), dependencies)
+
   savvy_update(dir)
 
   pkgbuild::compile_dll(dir)
@@ -63,16 +68,22 @@ DESCRIPTION <- "Package: %s
 Version: 0.0.0
 Encoding: UTF-8"
 
+tmp_pkg_count <- new.env(parent = emptyenv())
+tmp_pkg_count$i <- 0L
+
 # Based on cpp11:::generate_cpp_name
 generate_pkg_name <- function() {
   loaded_dlls <- names(getLoadedDLLs())
 
-  i <- 1L
+  i <- tmp_pkg_count$i
+  i <- i + 1L
   new_name <- sprintf("%s%i", SAVVY_PACKAGE_PREFIX, i)
   while (new_name %in% loaded_dlls) {
     new_name <- sprintf("%s%i", SAVVY_PACKAGE_PREFIX, i)
     i <- i + 1
   }
+
+  tmp_pkg_count$i <- i
 
   new_name
 }
@@ -92,4 +103,50 @@ tweak_wrappers <- function(path, pkg_name) {
   )
 
   writeLines(r_code, path)
+}
+
+generate_dependencies_toml <- function(dependencies) {
+  # Make sure savvy is in dependencies
+  if (!"savvy" %in% names(dependencies)) {
+    dependencies$savvy <- list(version = "*")
+  }
+
+  crate_names <- names(dependencies)
+
+  x <- vapply(seq_along(dependencies), \(i) {
+    dep <- dependencies[[i]]
+    name <- crate_names[i]
+
+    keys <- names(dep)
+    values <- vapply(dep, \(x) {
+      if (length(x) > 1L) {
+        sprintf("[%s]", paste(sprintf('"%s"', x), collapse = ", "))
+      } else {
+        sprintf('"%s"', as.character(x))
+      }
+    }, character(1L))
+
+    specifications <- paste(keys, "=", values, collapse = "\n")
+    sprintf("[dependencies.%s]\n%s\n", name, specifications)
+  }, character(1L))
+
+  paste(x, collapse = "\n")
+}
+
+tweak_cargo_toml <- function(path, dependencies) {
+  spec <- readLines(path)
+
+  # cut out the [dependencies] section
+  idx <- which(startsWith(spec, "[dependencies"))[1]
+  if (is.na(idx)) {
+    stop("No [depndencies] section found in Cargo.toml")
+  }
+  spec <- spec[1:idx]
+
+  spec <- c(
+    spec,
+    generate_dependencies_toml(dependencies)
+  )
+
+  writeLines(spec, path)
 }
