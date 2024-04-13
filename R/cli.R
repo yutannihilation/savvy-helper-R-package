@@ -94,6 +94,16 @@ savvy_init <- function(path = ".", verbose = TRUE) {
   system2(savvy_cli_path(), args = c("init", path), stdout = out, stderr = out)
 }
 
+#' Execute `savvy-cli extract-tests`
+#'
+#' @param path Path to the root of a Rust crate.
+#' @export
+savvy_extract_tests <- function(path = "./src/rust/") {
+  check_savvy_cli()
+
+  system2(savvy_cli_path(), args = c("extract-tests", path), stdout = TRUE, stderr = FALSE)
+}
+
 #' Execute `savvy-cli --version``
 #'
 #' @export
