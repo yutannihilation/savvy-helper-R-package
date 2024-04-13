@@ -47,6 +47,8 @@ savvy_source <- function(code, use_cache_dir = FALSE, env = parent.frame(), depe
 
   writeLines(code, file.path(dir, "src", "rust", "src", "lib.rs"))
 
+  tweak_cargo_toml(file.path(dir, "src", "rust", "Cargo.toml"), dependencies)
+
   savvy_update(dir)
 
   pkgbuild::compile_dll(dir)
@@ -96,6 +98,11 @@ tweak_wrappers <- function(path, pkg_name) {
 }
 
 generate_dependencies_toml <- function(dependencies) {
+  # Make sure savvy is in dependencies
+  if (!"savvy" %in% names(dependencies)) {
+    dependencies$savvy <- list(version = "*")
+  }
+
   crate_names <- names(dependencies)
 
   x <- vapply(seq_along(dependencies), \(i) {
@@ -105,7 +112,7 @@ generate_dependencies_toml <- function(dependencies) {
     keys <- names(dep)
     values <- vapply(dep, \(x) {
       if (length(x) > 1L) {
-        sprintf('[%s]', paste(sprintf('"%s"', x), collapse = ", "))
+        sprintf("[%s]", paste(sprintf('"%s"', x), collapse = ", "))
       } else {
         sprintf('"%s"', as.character(x))
       }
@@ -116,4 +123,22 @@ generate_dependencies_toml <- function(dependencies) {
   }, character(1L))
 
   paste(x, collapse = "\n")
+}
+
+tweak_cargo_toml <- function(path, dependencies) {
+  spec <- readLines(path)
+
+  # cut out the [dependencies] section
+  idx <- which(startsWith(spec, "[dependencies"))[1]
+  if (is.na(idx)) {
+    stop("No [depndencies] section found in Cargo.toml")
+  }
+  spec <- spec[1:idx]
+
+  spec <- c(
+    spec,
+    generate_dependencies_toml(dependencies)
+  )
+
+  writeLines(spec, path)
 }
