@@ -5,10 +5,11 @@
 #' re-compilation. This is an expert-only option.
 #' @param env The R environment where the R wrapping functions should be defined.
 #' @param clean If `TRUE`, remove the temporary R package used for compilation
+#' @param dependencies List of dependencies. (e.g. `list(once_cell = list(version = "1"))`)
 #' at the end of the R session.
 #'
 #' @export
-savvy_source <- function(code, use_cache_dir = FALSE, env = parent.frame(), clean = NULL) {
+savvy_source <- function(code, use_cache_dir = FALSE, env = parent.frame(), dependencies = list(), clean = NULL) {
   pkg_name <- generate_pkg_name()
 
   if (isTRUE(use_cache_dir)) {
@@ -92,4 +93,27 @@ tweak_wrappers <- function(path, pkg_name) {
   )
 
   writeLines(r_code, path)
+}
+
+generate_dependencies_toml <- function(dependencies) {
+  crate_names <- names(dependencies)
+
+  x <- vapply(seq_along(dependencies), \(i) {
+    dep <- dependencies[[i]]
+    name <- crate_names[i]
+
+    keys <- names(dep)
+    values <- vapply(dep, \(x) {
+      if (length(x) > 1L) {
+        sprintf('[%s]', paste(sprintf('"%s"', x), collapse = ", "))
+      } else {
+        sprintf('"%s"', as.character(x))
+      }
+    }, character(1L))
+
+    specifications <- paste(keys, "=", values, collapse = "\n")
+    sprintf("[dependencies.%s]\n%s\n", name, specifications)
+  }, character(1L))
+
+  paste(x, collapse = "\n")
 }

@@ -4,7 +4,13 @@
 \alias{savvy_source}
 \title{Compile Rust Code And Load}
 \usage{
-savvy_source(code, use_cache_dir = FALSE, env = parent.frame(), clean = NULL)
+savvy_source(
+  code,
+  use_cache_dir = FALSE,
+  env = parent.frame(),
+  dependencies = list(),
+  clean = NULL
+)
 }
 \arguments{
 \item{code}{Rust code to compile.}
@@ -14,8 +20,10 @@ re-compilation. This is an expert-only option.}
 
 \item{env}{The R environment where the R wrapping functions should be defined.}
 
-\item{clean}{If \code{TRUE}, remove the temporary R package used for compilation
+\item{dependencies}{List of dependencies. (e.g. \code{list(once_cell = list(version = "1"))})
 at the end of the R session.}
+
+\item{clean}{If \code{TRUE}, remove the temporary R package used for compilation}
 }
 \description{
 Compile Rust Code And Load
