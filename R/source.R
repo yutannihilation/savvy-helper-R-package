@@ -10,6 +10,8 @@
 #'
 #' @export
 savvy_source <- function(code, use_cache_dir = FALSE, env = parent.frame(), dependencies = list(), clean = NULL) {
+  check_savvy_cli()
+
   pkg_name <- generate_pkg_name()
 
   if (isTRUE(use_cache_dir)) {
