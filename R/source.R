@@ -66,7 +66,7 @@ savvy_source <- function(code, use_cache_dir = FALSE, env = parent.frame(), depe
   }
   dyn.load(dll_file)
 
-  wrapper_file <- file.path(dir, "R", "wrappers.R")
+  wrapper_file <- file.path(dir, "R", "000-wrappers.R")
   tweak_wrappers(wrapper_file, pkg_name)
   source(wrapper_file, local = env)
 }
