@@ -80,6 +80,8 @@ savvy_update <- function(path = ".", verbose = TRUE) {
 
   out <- if (verbose) "" else FALSE
   system2(savvy_cli_path(), args = c("update", path), stdout = out, stderr = out)
+  
+  cat("\nPlease run `devtools::document()`\n")
 }
 
 #' Execute `savvy-cli init``
@@ -92,6 +94,8 @@ savvy_init <- function(path = ".", verbose = TRUE) {
 
   out <- if (verbose) "" else FALSE
   system2(savvy_cli_path(), args = c("init", path), stdout = out, stderr = out)
+
+  cat("\nPlease run `devtools::document()`\n")
 }
 
 #' Execute `savvy-cli extract-tests`
