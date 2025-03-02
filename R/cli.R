@@ -17,7 +17,9 @@ savvy_cli_path <- function() {
 }
 
 get_latest_release <- function() {
-  jsonlite::read_json("https://api.github.com/repos/yutannihilation/savvy/releases/latest")[["tag_name"]]
+  jsonlite::read_json(
+    "https://api.github.com/repos/yutannihilation/savvy/releases/latest"
+  )[["tag_name"]]
 }
 
 get_download_url <- function() {
@@ -26,10 +28,14 @@ get_download_url <- function() {
   os <- Sys.info()[["sysname"]]
   arch <- Sys.info()[["machine"]]
 
-  binary <- switch(os,
+  binary <- switch(
+    os,
     Windows = "savvy-cli-x86_64-pc-windows-msvc.zip",
-    Linux   = if (arch == "x86_64") "savvy-cli-x86_64-unknown-linux-gnu.tar.xz" else "savvy-cli-aarch64-unknown-linux-gnu.tar.xz",
-    Darwin  = if (arch == "x86_64") "savvy-cli-x86_64-apple-darwin.tar.xz" else "savvy-cli-aarch64-apple-darwin.tar.xz"
+    Linux = if (arch == "x86_64")
+      "savvy-cli-x86_64-unknown-linux-gnu.tar.xz" else
+      "savvy-cli-aarch64-unknown-linux-gnu.tar.xz",
+    Darwin = if (arch == "x86_64") "savvy-cli-x86_64-apple-darwin.tar.xz" else
+      "savvy-cli-aarch64-apple-darwin.tar.xz"
   )
 
   paste(SAVVY_CLI_URL_BASE, latest_release, binary, sep = "/")
@@ -53,10 +59,22 @@ download_savvy_cli <- function() {
   # extract and copy
   if (Sys.info()[["sysname"]] == "Windows") {
     utils::unzip(archive_file, exdir = extract_tmp_dir)
-    file.copy(file.path(extract_tmp_dir, "savvy-cli.exe"), savvy_cli_path(), overwrite = TRUE)
+    file.copy(
+      file.path(extract_tmp_dir, "savvy-cli.exe"),
+      savvy_cli_path(),
+      overwrite = TRUE
+    )
   } else {
-    utils::untar(archive_file, exdir = extract_tmp_dir, extras = "--strip-components=1")
-    file.copy(file.path(extract_tmp_dir, "savvy-cli"), savvy_cli_path(), overwrite = TRUE)
+    utils::untar(
+      archive_file,
+      exdir = extract_tmp_dir,
+      extras = "--strip-components=1"
+    )
+    file.copy(
+      file.path(extract_tmp_dir, "savvy-cli"),
+      savvy_cli_path(),
+      overwrite = TRUE
+    )
   }
 
   invisible(NULL)
@@ -79,8 +97,13 @@ savvy_update <- function(path = ".", verbose = TRUE) {
   check_savvy_cli()
 
   out <- if (verbose) "" else FALSE
-  system2(savvy_cli_path(), args = c("update", path), stdout = out, stderr = out)
-  
+  system2(
+    savvy_cli_path(),
+    args = c("update", path),
+    stdout = out,
+    stderr = out
+  )
+
   cat("\nPlease run `devtools::document()`\n")
 }
 
@@ -105,7 +128,12 @@ savvy_init <- function(path = ".", verbose = TRUE) {
 savvy_extract_tests <- function(path = "./src/rust/") {
   check_savvy_cli()
 
-  system2(savvy_cli_path(), args = c("extract-tests", path), stdout = TRUE, stderr = FALSE)
+  system2(
+    savvy_cli_path(),
+    args = c("extract-tests", path),
+    stdout = TRUE,
+    stderr = FALSE
+  )
 }
 
 #' Execute `savvy-cli --version``

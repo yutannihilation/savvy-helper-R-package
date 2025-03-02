@@ -9,7 +9,13 @@
 #' at the end of the R session.
 #'
 #' @export
-savvy_source <- function(code, use_cache_dir = FALSE, env = parent.frame(), dependencies = list(), clean = NULL) {
+savvy_source <- function(
+  code,
+  use_cache_dir = FALSE,
+  env = parent.frame(),
+  dependencies = list(),
+  clean = NULL
+) {
   check_savvy_cli()
 
   pkg_name <- generate_pkg_name()
@@ -23,7 +29,11 @@ savvy_source <- function(code, use_cache_dir = FALSE, env = parent.frame(), depe
     # Using cache means reusing the same DLL with overwriting. So, unload it first.
     for (pkg_name_prev in names(getLoadedDLLs())) {
       if (startsWith(pkg_name_prev, SAVVY_PACKAGE_PREFIX)) {
-        dyn.unload(file.path(dir, "src", sprintf("%s%s", pkg_name_prev, .Platform$dynlib.ext)))
+        dyn.unload(file.path(
+          dir,
+          "src",
+          sprintf("%s%s", pkg_name_prev, .Platform$dynlib.ext)
+        ))
       }
     }
   } else {
@@ -55,7 +65,11 @@ savvy_source <- function(code, use_cache_dir = FALSE, env = parent.frame(), depe
 
   pkgbuild::compile_dll(dir)
 
-  dll_file <- file.path(dir, "src", sprintf("%s%s", pkg_name, .Platform$dynlib.ext))
+  dll_file <- file.path(
+    dir,
+    "src",
+    sprintf("%s%s", pkg_name, .Platform$dynlib.ext)
+  )
 
   # the directory cannot be removed if the loaded DLL file is inside, so move it
   # to some other place beforehand.
@@ -122,22 +136,30 @@ generate_dependencies_toml <- function(dependencies) {
 
   crate_names <- names(dependencies)
 
-  x <- vapply(seq_along(dependencies), \(i) {
-    dep <- dependencies[[i]]
-    name <- crate_names[i]
+  x <- vapply(
+    seq_along(dependencies),
+    \(i) {
+      dep <- dependencies[[i]]
+      name <- crate_names[i]
 
-    keys <- names(dep)
-    values <- vapply(dep, \(x) {
-      if (length(x) > 1L) {
-        sprintf("[%s]", paste(sprintf('"%s"', x), collapse = ", "))
-      } else {
-        sprintf('"%s"', as.character(x))
-      }
-    }, character(1L))
+      keys <- names(dep)
+      values <- vapply(
+        dep,
+        \(x) {
+          if (length(x) > 1L) {
+            sprintf("[%s]", paste(sprintf('"%s"', x), collapse = ", "))
+          } else {
+            sprintf('"%s"', as.character(x))
+          }
+        },
+        character(1L)
+      )
 
-    specifications <- paste(keys, "=", values, collapse = "\n")
-    sprintf("[dependencies.%s]\n%s\n", name, specifications)
-  }, character(1L))
+      specifications <- paste(keys, "=", values, collapse = "\n")
+      sprintf("[dependencies.%s]\n%s\n", name, specifications)
+    },
+    character(1L)
+  )
 
   paste(x, collapse = "\n")
 }

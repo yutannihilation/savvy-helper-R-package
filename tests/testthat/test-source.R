@@ -1,5 +1,6 @@
 test_that("savvy_source() works", {
-  savvy_source('
+  savvy_source(
+    '
 use savvy::savvy;
 
 #[savvy]
@@ -7,11 +8,14 @@ fn hello() -> savvy::Result<()> {
     savvy::r_println!("Hello");
     Ok(())
 }
-', use_cache_dir = TRUE)
+',
+    use_cache_dir = TRUE
+  )
 
   expect_output(hello(), "Hello")
 
-  savvy_source('
+  savvy_source(
+    '
 use savvy::savvy;
 
 #[savvy]
@@ -19,11 +23,14 @@ fn goodbye() -> savvy::Result<()> {
     savvy::r_println!("Goodbye");
     Ok(())
 }
-', use_cache_dir = TRUE)
+',
+    use_cache_dir = TRUE
+  )
 
   expect_output(goodbye(), "Goodbye")
 
-    savvy_source('
+  savvy_source(
+    '
 use savvy::savvy;
 use ferris_says::say;
 
@@ -44,8 +51,9 @@ fn ferris_says() -> savvy::Result<()> {
     use_cache_dir = TRUE
   )
 
-  expect_output(ferris_says(),
-" _____________________
+  expect_output(
+    ferris_says(),
+    " _____________________
 < Hello tech-savvies! >
  ---------------------
         \\
@@ -54,7 +62,9 @@ fn ferris_says() -> savvy::Result<()> {
         \\) /  o o  \\ (/
           '_   -   _'
           / '-----' \\
-", fixed = TRUE)
+",
+    fixed = TRUE
+  )
 })
 
 test_that("generate_dependencies_toml() works", {
@@ -99,7 +109,10 @@ version = "*"
   )
 
   # override savvy
-  x4 <- list(foo = list(path = "./../foo"), savvy = list(git = "https://github.com/yutannihilation/savvy"))
+  x4 <- list(
+    foo = list(path = "./../foo"),
+    savvy = list(git = "https://github.com/yutannihilation/savvy")
+  )
   expect_equal(
     generate_dependencies_toml(x4),
     r"([dependencies.foo]
