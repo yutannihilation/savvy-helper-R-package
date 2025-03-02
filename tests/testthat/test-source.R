@@ -1,4 +1,9 @@
 test_that("savvy_source() works", {
+  # Skip tests on R-universe; this uses GitHub API for downloading, but it
+  # seems R-universe reaches the API rate limit?
+  # cf. https://docs.r-universe.dev/publish/troubleshoot-build.html#how-to-know-whether-tests-are-run-on-r-universe
+  skip_if_not(identical(Sys.getenv("MY_UNIVERSE"), ""))
+
   savvy_source(
     '
 use savvy::savvy;
