@@ -11,7 +11,7 @@
 #' @export
 savvy_source <- function(
   code,
-  use_cache_dir = FALSE,
+  use_cache_dir = TRUE,
   env = parent.frame(),
   dependencies = list(),
   clean = NULL

@@ -1,3 +1,8 @@
+# savvy 0.0.5
+
+* `savvy_source()` now uses `use_cache_dir = TRUE` by default because
+  `use_cache_dir = FALSE` no longer works for some reason.
+
 # savvy 0.0.4
 
 * `savvy_source()` has a new argument `dependencies`, which you can specify the

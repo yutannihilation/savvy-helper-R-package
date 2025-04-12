@@ -6,7 +6,7 @@
 \usage{
 savvy_source(
   code,
-  use_cache_dir = FALSE,
+  use_cache_dir = TRUE,
   env = parent.frame(),
   dependencies = list(),
   clean = NULL
